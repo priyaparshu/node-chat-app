@@ -11,6 +11,7 @@ pathdir = path.join(__dirname, '../public');
 
 app.use(express.static(pathdir));
 io.on('connection', (socket) => {
+
     console.log('new user connected');
 
 
@@ -18,6 +19,11 @@ io.on('connection', (socket) => {
 
     socket.on('createMessage', (e) => {
         console.log(e)
+        io.emit('newMessage', {
+            from: e.from,
+            text: e.text,
+            createdAt: new Date().getTime()
+        })
     })
 
 
@@ -27,11 +33,11 @@ io.on('connection', (socket) => {
     })
 
 
-    socket.emit('newMessage', {
-        from: 'carl@gmail.com',
-        text: 'im me when you have time ',
-        createdAt: 234
-    });
+    // socket.emit('newMessage', {
+    //     from: 'carl@gmail.com',
+    //     text: 'im me when you have time ',
+    //     createdAt: 234
+    // });
 
 
     socket.on('disconnect', () => {
