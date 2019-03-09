@@ -12,12 +12,34 @@ pathdir = path.join(__dirname, '../public');
 app.use(express.static(pathdir));
 io.on('connection', (socket) => {
     console.log('new user connected');
+
+
+
+
+    socket.on('createMessage', (e) => {
+        console.log(e)
+    })
+
+
+
     socket.on('disconnect', () => {
         console.log('Client disconnected adios');
     })
+
+
+    socket.emit('newMessage', {
+        from: 'carl@gmail.com',
+        text: 'im me when you have time ',
+        createdAt: 234
+    });
+
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected adios');
+
+    });
+
 });
-
-
 
 app.get('/', (req, res) => {
     res.render('index.html');
