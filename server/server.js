@@ -7,7 +7,7 @@ const app = express()
 const path = require('path');
 const server = http.createServer(app);
 const io = socketIO(server);
-pathdir = path.join(__dirname, '../public');
+pathdir = path.join(__dirname, '../public')
 
 app.use(express.static(pathdir));
 io.on('connection', (socket) => {
