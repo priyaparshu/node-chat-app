@@ -8,7 +8,7 @@ const path = require('path');
 const server = http.createServer(app);
 const io = socketIO(server);
 pathdir = path.join(__dirname, '../public')
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
 app.use(express.static(pathdir));
 
 
@@ -23,10 +23,7 @@ io.on('connection', (socket) => {
         // to send the msg to everyone including myself
         io.emit('newMessage', generateMessage(e.from, e.text));
         callback('this is from the server');
-        //     from: e.from,
-        //     text: e.text,
-        //     createdAt: new Date().getTime()
-        // })
+
         // to send the msg to everyone excluding myself
         // socket.broadcast.emit('newMessage', {
         //     from: e.from,
@@ -34,6 +31,10 @@ io.on('connection', (socket) => {
         //     createdAt: new Date().getTime()
         // });
     });
+
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newLocationMessage', generateLocationMessage('Admin', `${coords.latitude},${coords.longitude}`));
+    })
 
     socket.on('disconnect', () => {
         console.log('Client disconnected adios');
