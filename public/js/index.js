@@ -54,7 +54,7 @@ locationButton.on('click', function () {
         socket.emit('createLocationMessage', {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-        })
+        });
     }, function () {
         alert(`Unable to fetch posotion ${position}`)
     });

@@ -8,11 +8,16 @@ var generateMessage = (from, text) => {
     };
 };
 
-var generateLocationMessage = function (from, latitude, longitude) {
+var generateLocationMessage = (from, latitude, longitude) => {
+    console.log('from', from);
+    console.log('lat', latitude);
+    console.log('long', longitude);
     return {
+
         from,
         url: `https://www.google.com/maps?q=${latitude},${longitude}`,
         createdAt: new Date().getTime()
+
     };
 };
 
