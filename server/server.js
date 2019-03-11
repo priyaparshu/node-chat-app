@@ -18,10 +18,11 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
-    socket.on('createMessage', (e) => {
+    socket.on('createMessage', (e, callback) => {
         console.log(e)
         // to send the msg to everyone including myself
         io.emit('newMessage', generateMessage(e.from, e.text));
+        callback('this is from the server');
         //     from: e.from,
         //     text: e.text,
         //     createdAt: new Date().getTime()
@@ -33,8 +34,6 @@ io.on('connection', (socket) => {
         //     createdAt: new Date().getTime()
         // });
     });
-
-
 
     socket.on('disconnect', () => {
         console.log('Client disconnected adios');
@@ -52,6 +51,8 @@ io.on('connection', (socket) => {
         console.log('Client disconnected adios');
 
     });
+
+
 
 });
 
