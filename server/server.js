@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
         console.log(e)
         // to send the msg to everyone including myself
         io.emit('newMessage', generateMessage(e.from, e.text));
-        callback('this is from the server');
+        callback();
 
         // to send the msg to everyone excluding myself
         // socket.broadcast.emit('newMessage', {
