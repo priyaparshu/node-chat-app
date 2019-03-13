@@ -10,24 +10,49 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
+    //var formatedText = moment(message.createdAt).format('h:mm a');
+    var formatedTime = moment(message.createdAt).format('h:mm a');
+    console.log('ft', formatedTime);
+    var template = jQuery('#message-template').html();
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formatedTime
+    });
+    console.log(html);
+    jQuery('#messages').append(html);
+    console.log('newMessage', template);
     //console.log('newMessage', message);
-    var formatedTime = moment(message.createdAt).format('h:mm a')
-    var li = jQuery('<li></li>');
-    li.text(`${message.from} ${formatedTime}: ${message.text}`)
-    jQuery('#messages').append(li);
+    // var formatedTime = moment(message.createdAt).format('h:mm a')
+    // var li = jQuery('<li></li>');
+    // li.text(`${message.from} ${formatedTime}: ${message.text}//`)
+    // jQuery('#messages').append(li);
 });
 
 
+
 socket.on('newLocationMessage', function (message) {
-    var formatedLocationText = moment(message.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    var a = jQuery('<a target="_blank">my current location</a>');
-    li.text(`${formatedLocationText}:  ${message.from}: `);
-    a.attr('href', message.url);
-    li.append(a);
-    jQuery('#messages').append(li);
-    //console.log('li', li);
+    var formatedLocationTime = moment(message.createdAt).format('h:mm a');
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template, {
+        from: message.from,
+        createdAt: formatedLocationTime,
+        url: message.url
+    })
+    jQuery('#messages').append(html);
 })
+
+// socket.on('newLocationMessage', function (message) {
+//     var formatedLocationTime = moment(message.createdAt).format('h:mm a');
+//     console.log(message);
+//     var li = jQuery('<li></li>');
+//     var a = jQuery('<a target="_blank">my current location</a>');
+//     li.text(`${formatedLocationTime}:  ${message.from}: `);
+//     a.attr('href', message.url);
+//     li.append(a);
+//     jQuery('#messages').append(li);
+//     console.log('li', li);
+// })
 // socket.emit('createMessage', {
 //     from: 'frank',
 //     text: 'i am done'
