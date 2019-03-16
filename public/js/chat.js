@@ -26,7 +26,7 @@ socket.on('connect', function () {
     socket.emit('join', params, function (err) {
         if (err) {
             alert(err);
-            window.location.href = '/'
+            window.location.href = '/';
         } else {
             console.log('no error')
         }
@@ -40,8 +40,14 @@ socket.on('disconnect', function () {
 
 //takes users array similr to getUser array
 socket.on('updateUserList', function (users) {
-    console.log('users list', users);
-})
+    var ol = jQuery('<ol></ol>');
+
+    users.forEach(function (user) {
+        ol.append(jQuery('<li></li>').text(user));
+    });
+    jQuery('#users').html(ol);
+});
+
 socket.on('newMessage', function (message) {
     //var formatedText = moment(message.createdAt).format('h:mm a');
     var formatedTime = moment(message.createdAt).format('h:mm a');
@@ -52,7 +58,7 @@ socket.on('newMessage', function (message) {
         from: message.from,
         createdAt: formatedTime
     });
-    console.log(html);
+    //console.log(html);
     jQuery('#messages').append(html);
     console.log('newMessage', template);
     //console.log('newMessage', message);
@@ -73,7 +79,8 @@ socket.on('newLocationMessage', function (message) {
         url: message.url
     })
     jQuery('#messages').append(html);
-})
+    scrollToBootom();
+});
 
 // socket.on('newLocationMessage', function (message) {
 //     var formatedLocationTime = moment(message.createdAt).format('h:mm a');
@@ -97,7 +104,7 @@ jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
     var messageTextBox = jQuery('[name=message]')
     socket.emit('createMessage', {
-        from: 'User',
+
         text: messageTextBox.val()
     }, function () {
         messageTextBox.val('')

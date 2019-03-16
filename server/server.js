@@ -46,10 +46,14 @@ io.on('connection', (socket) => {
 
 
     socket.on('createMessage', (e, callback) => {
-        console.log(e)
+        var user = users.getUser(socket.id);
+
+        if (user && isRealString(e.text)) {
+            io.to(user.room).emit('newMessage', generateMessage(users.name, e.text));
+            callback();
+        }
         // to send the msg to everyone including myself
-        io.emit('newMessage', generateMessage(e.from, e.text));
-        callback();
+
 
         // to send the msg to everyone excluding myself
         // socket.broadcast.emit('newMessage', {
@@ -60,9 +64,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createLocationMessage', (coords) => {
-        console.log("LAT", coords.latitude);
-        console.log("LONG", coords.longitude);
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+        var user = users.getUser(socket.id);
+        if (user) {
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+        }
+
     })
 
     socket.on('disconnect', () => {
